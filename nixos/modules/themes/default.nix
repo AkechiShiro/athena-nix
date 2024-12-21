@@ -6,8 +6,8 @@
     ./cyborg
     ./graphite
     ./hackthebox
-    ./samurai
+    #./samurai
     ./sweet
-    ./temple
+    #./temple
   ];
 }
