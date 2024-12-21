@@ -76,10 +76,6 @@ in
       openFirewall = true;
     };
   };
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-label/ESP";
-    fsType = "vfat";
-  };
   systemd.services.cloud-config.serviceConfig = {
     Restart = "on-failure";
   };
