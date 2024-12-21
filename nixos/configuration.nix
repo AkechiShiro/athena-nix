@@ -48,15 +48,41 @@ in
       isNormalUser = true;
       hashedPassword = "${hashed}";
       extraGroups = [ "wheel" "input" "video" "render" "networkmanager" ];
+      openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDWlTEs5InoyFHmUJipTZsgeYK9zbFWlcR5fxsWb3pB7" ];
     };
   };
 
   networking = {
+    networkmanager.enable = lib.mkForce false;
+    useDHCP = false;
+    # Important for Azure
+    useNetworkd = true;
     hostName = "${hostname}";
     enableIPv6 = false;
   };
 
-  services.flatpak.enable = true;
+  virtualisation.azureImage.vmGeneration = "v2";
+  virtualisation.azure.acceleratedNetworking = true;
+
+    services = {
+    openssh = {
+      enable = true;
+      openFirewall = true;
+    };
+    flatpak.enable = false;
+    cloud-init.network.enable = true;
+    xrdp { 
+      defaultWindowManager = "gnome-session";
+      openFirewall = true;
+    };
+  };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-label/ESP";
+    fsType = "vfat";
+  };
+  systemd.services.cloud-config.serviceConfig = {
+    Restart = "on-failure";
+  };
 
   cyber = {
     enable = false;
